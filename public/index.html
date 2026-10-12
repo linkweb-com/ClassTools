@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="vi">
 <head>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <meta name="google-site-verification" content="qfOCY5pta7nCk1wRDsUud2QksRUKm8qWORkkQ1706Gs" />
 <title>ClassTool - CLS | Quản lý tài liệu học tập</title>
 <meta name="description" content="Trang web ClassTool - CLS hỗ trợ chia sẻ và quản lý tài liệu học tập lớp học.">
@@ -73,9 +74,68 @@ input,select,textarea{outline:none}input:focus,select:focus,textarea:focus{borde
 </main></div></div>
 <div id="modalRoot"></div><div id="toastRoot" class="fixed right-4 bottom-4 z-[100] space-y-2 w-[min(360px,calc(100vw-2rem))]"></div>
 <script>
+const SUPABASE_URL = 'https://gbmavkldxirpqgtcepox.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_gaw-zZn9rbzG1_U8wcgVTw_lMPOVNgm';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+async function loadTasksFromCloud() {
+        try {
+            const { data, error } = await supabaseClient
+                .from('tasks')
+                .select(`
+                    id,
+                    title,
+                    description,
+                    status,
+                    task_date,
+                    assigned_to,
+                    profiles (
+                        full_name,
+                        username
+                    )
+                `)
+                .order('task_date', { ascending: true });
+
+            if (error) throw error;
+            console.log("Danh sách nhiệm vụ từ Cloud:", data);
+            return data;
+        } catch (error) {
+            console.error("Lỗi khi tải nhiệm vụ:", error.message);
+        }
+    }
+
+    async function updateTaskStatusInCloud(taskId, newStatus) {
+        try {
+            const { error } = await supabaseClient
+                .from('tasks')
+                .update({ status: newStatus })
+                .eq('id', taskId);
+
+            if (error) throw error;
+            console.log("Cập nhật trạng thái thành công!");
+        } catch (error) {
+            console.error("Lỗi cập nhật:", error.message);
+            alert("Không thể cập nhật trạng thái nhiệm vụ. Vui lòng thử lại!");
+        }
+    }
+
+    function initRealtimeSync(onUpdateCallback) {
+        supabaseClient
+            .channel('public-tasks')
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'tasks' },
+                (payload) => {
+                    console.log('Phát hiện thay đổi dữ liệu thời gian thực:', payload);
+                    if (typeof onUpdateCallback === 'function') {
+                        onUpdateCallback();
+                    }
+                }
+            )
+            .subscribe();
+    }
 const KEY='classtools_v1';
 const initialStudents=[
-['KHẢ ÁI','CLS594248517263','54693'],['VĂN AN','CLS594238472165','607159'],['TÙNG BÁCH','CLS594275861324','574362'],['KHÁNH BĂNG','CLS594217283456','302419'],['QUỐC DŨNG','CLS594243271568','458736'],['TẤN DUY','CLS594218274365','216947'],['NGỌC HÂN','CLS594248176352','235196'],['PHÚC HẬU','CLS594213562874','586914'],['THÁI HÒA','CLS594252348716','781260'],['NHỰT HUY','CLS594235861247','87162'],['NGỌC HƯỜNG','CLS594271564238','659321'],['HOÀNG KHẢI','CLS594281479065','429850'],['TRỌNG KHANG','CLS594220197683','728153'],['ANH KHOA','CLS594281352476','321745'],['NHỰT MINH','CLS594296318245','620937'],['QUANG MINH','CLS594298562704','492705'],['DIỄM MY','CLS594218495260','730812'],['THỦY MY','CLS594231845629','784520'],['BÍCH NGỌC','CLS594281945624','696815'],['MINH NHẬT','CLS594219867243','823517'],['HUỲNH NHƯ','CLS594201548796','67134'],['QUỲNH NHƯ','CLS594269152073','39165'],['TẤN PHONG','CLS594262759018','46917'],['XUÂN PHÚC','CLS594224703615','129834'],['NHẬT QUANG','CLS594206495128','286915'],['TRƯỜNG SƠN','CLS594209281635','193827'],['THIỆN TÂM','CLS594264329851','459380'],['HỮU TIẾN','CLS594251479810','953127'],['NGỌC THANH','CLS594289346127','134067'],['HOÀNG THỊNH','CLS594226193054','982156'],['YẾN THƯ','CLS594206714293','563728'],['BÍCH TRÂM','CLS594251074283','489065'],['MỸ TRÂM','CLS594217956238','798120'],['HẢI TRIỀU','CLS594221862579','476820'],['QUỐC TRỌNG','CLS594285936421','21497'],['PHƯƠNG UYÊN','CLS594242856709','946821'],['HOÀNG VŨ','CLS594286042739','137068'],['CHÍ VY','CLS594282457690','924307'],['NHƯ Ý','CLS594282759403','109628']];
+['KHẢ ÁI','CLS594248517263','54693'],['VĂN AN','CLS594238472165','607159'],['TÙNG BÁCH','CLS594275861324','574362'],['KHÁNH BĂNG','CLS594217283456','302419'],['QUỐC DŨNG','CLS594243271568','458736'],['TẤN DUY','CLS594218274365','216947'],['NGỌC HÂN','CLS594248176352','235196'],['PHÚC HẬU','CLS594213562874','586914'],['THÁI HÒA','CLS594252348716','781260'],['NHỰT HUY','CLS594235861247','87162'],['NGỌC HƯỜNG','CLS594271564238','659321'],['HOÀNG KHẢI','CLS594281479065','429850'],['TRỌNG KHANG','CLS594220197683','728153'],['ANH KHOA','CLS594281352476','321745'],['NHỰT MINH','CLS594296318245','620937'],['QUANG MINH','CLS594298562704','492705'],['DIỄM MY','CLS594218495260','730812'],['THÙY MY','CLS594231845629','784520'],['BÍCH NGỌC','CLS594281945624','696815'],['MINH NHẬT','CLS594219867243','823517'],['HUỲNH NHƯ','CLS594201548796','67134'],['QUỲNH NHƯ','CLS594269152073','39165'],['TẤN PHONG','CLS594262759018','46917'],['XUÂN PHÚC','CLS594224703615','129834'],['NHẬT QUANG','CLS594206495128','286915'],['TRƯỜNG SƠN','CLS594209281635','193827'],['THIỆN TÂM','CLS594264329851','459380'],['HỮU TIẾN','CLS594251479810','953127'],['NGỌC THANH','CLS594289346127','134067'],['HOÀNG THỊNH','CLS594226193054','982156'],['YẾN THƯ','CLS594206714293','563728'],['BÍCH TRÂM','CLS594251074283','489065'],['MỸ TRÂM','CLS594217956238','798120'],['HẢI TRIỀU','CLS594221862579','476820'],['QUỐC TRỌNG','CLS594285936421','21497'],['PHƯƠNG UYÊN','CLS594242856709','946821'],['HOÀNG VŨ','CLS594286042739','137068'],['CHÍ VY','CLS594282457690','924307'],['NHƯ Ý','CLS594282759403','109628']];
 const adminAccounts=[
 {name:'MỸ NGÀ',id:'CLS586323096878',password:'580162',role:'teacher',violationAccess:true},
 {name:'NHẬT QUANG',id:'CLS547906495128',password:'286915',role:'officer',violationAccess:true},
@@ -439,5 +499,13 @@ if('Notification'in window&&Notification.permission==='default'&&location.protoc
 renderAll();
 try{const savedPage=sessionStorage.getItem('classtools-active-page');if(savedPage&&document.getElementById('page-'+savedPage))go(savedPage)}catch{}
 // Security note: this is a local demo. Credentials and permissions stored in localStorage are not secure authentication.
+// Kích hoạt chạy tự động ngay khi vừa mở trang web
+window.addEventListener('DOMContentLoaded', async () => {
+    // 1. Tải danh sách nhiệm vụ từ Supabase lên giao diện
+    await loadTasksFromCloud();
+
+    // 2. Bật chế độ tự động đồng bộ thời gian thực (Realtime)
+    initRealtimeSync(loadTasksFromCloud);
+});
 </script>
 </body></html>
