@@ -131,6 +131,7 @@ async function loadTasksFromCloud() {
                 }
             )
             .subscribe();
+    }
 // 1. Khai báo hàm mở bảng đăng nhập (sửa lỗi openAuth is not defined)
 function openAuth() {
     modal(`
@@ -144,6 +145,7 @@ function openAuth() {
             <button type="submit" class="w-full bg-blue-600 text-white rounded-xl py-3 font-bold hover:bg-blue-700 transition">Đăng nhập</button>
         </form>
     `, 'Đăng nhập hệ thống');
+}
 
 // 2. Hàm tạo học sinh (đã loại bỏ hoàn toàn dấu ?. gây lỗi cú pháp ở dòng 203)
 function createStudentModal() {
