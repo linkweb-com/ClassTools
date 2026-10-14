@@ -33,19 +33,28 @@ button:not(:disabled):active{transform:translateY(1px) scale(.985)}
 #page-overview .quick-link:hover{transform:translateY(-4px);box-shadow:0 18px 35px rgba(37,99,235,.24),inset 0 1px 0 #fff!important}
 #page-overview h1{letter-spacing:-.045em;text-shadow:0 3px 18px rgba(37,99,235,.10)}
 #page-overview .home-hero{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.98);background:linear-gradient(120deg,rgba(255,255,255,.88),rgba(191,219,254,.62) 55%,rgba(221,214,254,.55));box-shadow:0 22px 55px rgba(52,85,130,.16),inset 0 1px 0 #fff;backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px)}
-/* FLOATING 2D SHAPES — đặt nổi trên lớp nền, không chặn thao tác */
-.float-shapes{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:20;isolation:isolate}
-.float-shape{position:absolute;display:block;opacity:.72;border:1px solid rgba(255,255,255,.98);background:linear-gradient(135deg,rgba(255,255,255,.82),rgba(96,165,250,.40));box-shadow:0 18px 48px rgba(37,99,235,.20),inset 0 1px 3px rgba(255,255,255,1);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);will-change:transform;animation:floaty 8s ease-in-out infinite}
-.float-shape.s1{width:104px;height:104px;border-radius:30px;left:2.5%;top:24%;transform:rotate(24deg)}
-.float-shape.s2{width:72px;height:72px;border-radius:50%;right:4%;top:21%;background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(196,181,253,.62));animation-delay:-2s;animation-duration:10s}
-.float-shape.s3{width:126px;height:126px;border-radius:38px;right:8%;bottom:9%;background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(147,197,253,.55));animation-delay:-4s;animation-duration:11s}
-.float-shape.s4{width:52px;height:52px;border-radius:16px;left:22%;bottom:12%;background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(196,181,253,.55));animation-delay:-6s}
-.float-shape.s5{width:38px;height:38px;left:48%;top:17%;border-radius:12px;background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(125,211,252,.68));animation-delay:-1s;animation-duration:7s}
-.float-shape.s6{width:24px;height:24px;right:27%;bottom:20%;border-radius:50%;background:linear-gradient(135deg,#fff,rgba(167,139,250,.72));animation-delay:-3s;animation-duration:6s}
-.float-shape.s7{width:56px;height:56px;right:17%;top:52%;border-radius:50% 50% 12px 50%;transform:rotate(35deg);background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(125,211,252,.52));animation-delay:-5s;animation-duration:12s}
-@keyframes floaty{0%,100%{transform:translate3d(0,0,0) rotate(0deg)}50%{transform:translate3d(8px,-34px,0) rotate(16deg)}}
-@media(max-width:700px){.float-shape.s1{width:58px;height:58px;left:-12px;top:26%}.float-shape.s3{width:72px;height:72px;right:-12px;bottom:12%}.float-shape.s4{left:14%;width:32px;height:32px}.float-shape.s7{right:5%;width:34px;height:34px}.float-shape{opacity:.48}}
-@media(prefers-reduced-motion:reduce){.float-shape{animation:none}button{transition:none}}
+/* FLOATING 2D SHAPES — chạy quanh viền nền, bật ngược hướng khi chạm mép */
+.float-shapes{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;isolation:isolate}
+.float-shape{position:absolute;display:block;opacity:.42;border:1px solid rgba(255,255,255,.98);background:linear-gradient(135deg,rgba(255,255,255,.82),rgba(96,165,250,.42));box-shadow:0 12px 34px rgba(37,99,235,.15),inset 0 1px 3px rgba(255,255,255,1);will-change:transform;pointer-events:none}
+.float-shape.s1{width:82px;height:82px;border-radius:26px;left:2%;top:20%;transform:rotate(24deg)}
+.float-shape.s2{width:58px;height:58px;border-radius:50%;left:80%;top:16%;background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(196,181,253,.62))}
+.float-shape.s3{width:96px;height:96px;border-radius:30px;left:70%;top:70%;background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(147,197,253,.55))}
+.float-shape.s4{width:42px;height:42px;border-radius:14px;left:22%;top:76%;background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(196,181,253,.55))}
+.float-shape.s5{width:30px;height:30px;left:48%;top:17%;border-radius:10px;background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(125,211,252,.68))}
+.float-shape.s6{width:20px;height:20px;left:27%;top:60%;border-radius:50%;background:linear-gradient(135deg,#fff,rgba(167,139,250,.72))}
+.float-shape.s7{width:46px;height:46px;left:87%;top:50%;border-radius:50% 50% 12px 50%;background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(125,211,252,.52))}
+/* Main app sits above the decorative shapes; shapes never cover text or controls. */
+#app{position:relative;z-index:1;background:transparent}
+#page-overview .home-hero{text-align:center}
+#page-overview .home-hero>p:first-of-type{ text-align:center }
+#page-overview .home-hero h1{text-align:center}
+#page-overview .home-hero>p:nth-of-type(2){text-align:center;max-width:900px;margin-left:auto;margin-right:auto}
+#page-overview .home-hero .flex.flex-wrap{justify-content:center}
+#page-overview .letter-heading{justify-content:center;text-align:center}
+#page-overview .letter-title{text-align:center;width:100%;font-size:1.45rem;font-weight:800;margin-bottom:1rem}
+#page-overview .letter-body{text-align:justify;text-justify:inter-word;line-height:2;white-space:pre-line}
+@media(max-width:700px){.float-shape{opacity:.28}.float-shape.s1{width:48px;height:48px}.float-shape.s3{width:58px;height:58px}.float-shape.s4{width:28px;height:28px}}
+@media(prefers-reduced-motion:reduce){.float-shape{display:none}button{transition:none}}
 </style></head>
 <body>
 <div class="float-shapes" aria-hidden="true"><span class="float-shape s1"></span><span class="float-shape s2"></span><span class="float-shape s3"></span><span class="float-shape s4"></span><span class="float-shape s5"></span><span class="float-shape s6"></span><span class="float-shape s7"></span></div>
@@ -76,11 +85,11 @@ button:not(:disabled):active{transform:translateY(1px) scale(.985)}
 <section id="page-overview" class="page">
 <div class="home-hero rounded-[28px] p-6 md:p-9 mb-5">
 <div class="absolute -right-8 -top-12 w-48 h-48 rounded-full border border-white/80 bg-blue-200/20"></div><div class="absolute right-24 -bottom-16 w-36 h-36 rounded-[35px] rotate-12 border border-white/80 bg-violet-200/20"></div>
-<p class="text-sm font-semibold tracking-widest uppercase text-blue-700 relative">Lớp học · 9A16</p><h1 class="text-4xl md:text-5xl font-black tracking-tight mt-2 relative">Chào Mừng <span aria-hidden="true"></span></h1>
+<p class="text-sm font-semibold tracking-widest uppercase text-blue-700 relative">Lớp học · 9A16</p><h1 class="text-4xl md:text-5xl font-black tracking-tight mt-2 relative">Chào Mừng <span aria-hidden="true">✨</span></h1>
 <p class="text-base md:text-lg text-slate-600 mt-3 relative">Đoàn kết, Đoàn Kết, Đại Đoàn Kết - Thành Công, Thành Công, Đại Thành Công</p>
 <div class="flex flex-wrap gap-3 mt-6 relative"><div class="rounded-2xl px-4 py-3 border border-white/90 bg-white/55 shadow-sm"><div class="text-xs uppercase tracking-wide text-slate-500">Sĩ số</div><div class="text-lg font-extrabold mt-1">42 Học Sinh</div></div><div class="rounded-2xl px-4 py-3 border border-white/90 bg-white/55 shadow-sm"><div class="text-xs uppercase tracking-wide text-slate-500">Giáo viên chủ nhiệm</div><div class="text-lg font-extrabold mt-1">Mỹ Ngà</div></div></div>
 </div>
-<div class="card p-5 md:p-7 mb-5"><div class="flex items-center gap-3 mb-4"><span class="grid place-items-center w-11 h-11 rounded-2xl bg-amber-100/80 text-2xl"></span><div><h2 class="text-xl font-extrabold">Thư Gửi</h2><p class="text-sm text-slate-500">Cùng nhau cố gắng vì mục tiêu chung của 9A16</p></div></div><div class="text-slate-700 leading-8 whitespace-pre-line">Gửi các thành viên của 9A16!
+<div class="card p-5 md:p-7 mb-5"><div class="letter-heading flex items-center gap-3 mb-4 flex-wrap"><span class="grid place-items-center w-11 h-11 rounded-2xl bg-amber-100/80 text-2xl">✉️</span><h2 class="letter-title">Thư gửi</h2></div><div class="letter-body text-slate-700">Gửi các thành viên của 9A16!
 Hành trình 4 năm dưới mái trường THCS đang dần tiến về chặng cuối, và Kỳ thi Tuyển sinh vào Lớp 10 chính là cột mốc quan trọng nhất đánh dấu sự trưởng thành của chúng ta.
 Những ngày tháng này, có thể ai trong chúng ta cũng cảm thấy mệt mỏi với những bài tập khó hiểu, những đêm thức khuya cố gắng học tập. Nhưng hãy nhớ rằng: Mọi sự nỗ lực chân thành hôm nay đều là viên gạch xây nên tấm vé bước vào ngôi trường cấp 3 mơ ước ngày mai!
 9A16 không chỉ là một tập thể, mà là một gia đình cùng chung mục tiêu. Đừng để sự lo lắng làm lu mờ sự tự tin của bản thân. Mỗi công sức và thời gian mà các bạn đã cố gắng phấn đấu đều đang đưa chúng ta tiến gần hơn đến vạch đích.</div></div>
@@ -579,4 +588,31 @@ window.addEventListener('DOMContentLoaded', async () => {
     initRealtimeSync(loadTasksFromCloud);
 });
 </script>
+
+<script>
+// Chuyển động tự do trong khung nhìn: các shape bật ngược khi chạm bất kỳ cạnh nào.
+(()=>{
+ const layer=document.querySelector('.float-shapes'); if(!layer) return;
+ const shapes=[...layer.querySelectorAll('.float-shape')];
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ if(reduced) return;
+ const movers=shapes.map((el,i)=>({el,x:Math.random()*Math.max(1,innerWidth-el.offsetWidth),y:Math.random()*Math.max(1,innerHeight-el.offsetHeight),vx:(Math.random()>.5?1:-1)*(0.22+Math.random()*.35),vy:(Math.random()>.5?1:-1)*(0.18+Math.random()*.32),r:(i*29)%360,vr:(Math.random()>.5?1:-1)*0.08}));
+ let last=0;
+ function frame(now){
+  const dt=Math.min(2,(now-last)/16.67||1);last=now;
+  const w=innerWidth,h=innerHeight;
+  for(const m of movers){
+   const sw=m.el.offsetWidth,sh=m.el.offsetHeight;
+   m.x+=m.vx*dt;m.y+=m.vy*dt;m.r+=m.vr*dt;
+   if(m.x<=0){m.x=0;m.vx=Math.abs(m.vx)} else if(m.x+sw>=w){m.x=Math.max(0,w-sw);m.vx=-Math.abs(m.vx)}
+   if(m.y<=0){m.y=0;m.vy=Math.abs(m.vy)} else if(m.y+sh>=h){m.y=Math.max(0,h-sh);m.vy=-Math.abs(m.vy)}
+   m.el.style.left='0px';m.el.style.top='0px';m.el.style.transform=`translate3d(${m.x}px,${m.y}px,0) rotate(${m.r}deg)`;
+  }
+  requestAnimationFrame(frame);
+ }
+ requestAnimationFrame(frame);
+ window.addEventListener('resize',()=>{for(const m of movers){m.x=Math.min(m.x,innerWidth-m.el.offsetWidth);m.y=Math.min(m.y,innerHeight-m.el.offsetHeight)}});
+})();
+</script>
+
 </body></html>
